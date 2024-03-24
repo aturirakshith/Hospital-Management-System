@@ -1,0 +1,41 @@
+<?php
+use PHPUnit\Framework\TestCase;
+
+class AdminModuleTest extends TestCase
+{
+    // Test case for checking appointment creation with valid data
+    public function testValidAppointmentCreation()
+    {
+        // Mocking the session data
+        $_SESSION['pid'] = 1;
+        $_SESSION['username'] = 'testuser';
+        $_SESSION['email'] = 'test@example.com';
+        $_SESSION['fname'] = 'John';
+        $_SESSION['lname'] = 'Doe';
+        $_SESSION['gender'] = 'Male';
+        $_SESSION['contact'] = '1234567890';
+
+        // Simulate form submission with valid data
+        $postData = [
+            'doctor' => 'Dr. Smith',
+            'docFees' => 50, // Assuming valid fee amount
+            'appdate' => '2024-03-22', // Assuming a future date
+            'apptime' => '10:00:00' // Assuming a valid appointment time
+        ];
+
+        // Include the PHP module (func.php) to execute the appointment creation logic
+        ob_start(); // Start output buffering to capture output
+        include('func.php'); // Include func.php only once
+        $_POST = $postData; // Set POST data
+        $_SERVER['REQUEST_METHOD'] = 'POST'; // Set request method
+        ob_end_clean(); // End output buffering
+
+        // Capture output (echo) to retrieve the alert message
+        ob_start(); // Start output buffering again
+        include('func.php'); // Include func.php to capture output
+        $output = ob_get_clean(); // Get the captured output
+
+        // Assert that the appointment is successfully booked
+        $this->assertStringContainsString('Your appointment successfully booked', $output);
+    }
+}
