@@ -3,11 +3,10 @@ use PHPUnit\Framework\TestCase;
 
 class LogoutTest extends TestCase {
     public function testSessionDestroyedAndMessageDisplayed() {
-        // Start output buffering to capture the echoed message
+        // Start output buffering 
         ob_start();
 
-        // Include the script that destroys the session
-        require_once 'logout1.php'; // Replace 'path_to_your_php_script.php' with the actual path
+        require_once 'logout1.php'; 
 
         // Get the captured output
         $output = ob_get_clean();

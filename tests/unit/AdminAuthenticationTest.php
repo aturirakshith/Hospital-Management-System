@@ -2,49 +2,60 @@
 
 use PHPUnit\Framework\TestCase;
 use Mockery as m;
-
+include_once('admin_func.php');
 
 class AdminAuthenticationTest extends TestCase
 {
 
+    protected $dbMock;
+  
+    public function setUp(): void
+    {
+        $this->dbMock = Mockery::mock('Database');
+    }
+
+    public function tearDown(): void
+    {
+        Mockery::close();
+    }
+
     public function testAuthenticateWithValidCredentials()
     {
-        include_once('admin_func.php');
-        $dbMock = m::mock('Database');
-        $resultMock = m::mock('mysqli_result');
+        
+        $resultMock = m::mock('mysqli_result'); 
        
-        $dbMock->shouldReceive('query')
+        $this->dbMock->shouldReceive('query')
             ->with("SELECT * FROM admintb WHERE username='username' AND password='password';")
             ->once()
             ->andReturn($resultMock);
       
-            $dbMock->shouldReceive('num_rows')
+        $this->dbMock->shouldReceive('num_rows')
             ->with($resultMock)
             ->once()
             ->andReturn(1);
 
-        $adminAuthenticator = new AdminAuthentication($dbMock);
+        $adminAuthenticator = new AdminAuthentication($this->dbMock);
 
         $this->assertTrue($adminAuthenticator->authenticate('username', 'password'));
     }
 
     public function testAuthenticateWithInValidCredentials()
     {
-        include_once('admin_func.php');
-        $dbMock = m::mock('Database');
+      
+        
         $resultMock = m::mock('mysqli_result');
        
-        $dbMock->shouldReceive('query')
+        $this->dbMock->shouldReceive('query')
             ->with("SELECT * FROM admintb WHERE username='username' AND password='password';")
             ->once()
             ->andReturn($resultMock);
       
-            $dbMock->shouldReceive('num_rows')
+            $this->dbMock->shouldReceive('num_rows')
             ->with($resultMock)
             ->once()
             ->andReturn(0);
 
-        $adminAuthenticator = new AdminAuthentication($dbMock);
+        $adminAuthenticator = new AdminAuthentication($this->dbMock);
 
         $this->assertTrue(!$adminAuthenticator->authenticate('username', 'password'));
     }

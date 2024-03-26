@@ -7,12 +7,21 @@ use PHPUnit\Framework\TestCase;
 
 class DoctorTest extends TestCase
 {
+    protected $dbMock;
+    public function setUp(): void
+    {
+        $this->dbMock = Mockery::mock('Database');
+    }
+
+    public function tearDown(): void
+    {
+        Mockery::close();
+    }
+    
     public function testDeleteDoctor() {
 
-        // Mocking the database object
-        $dbMock = Mockery::mock('Database');
-        $dbMock->shouldReceive('query')->once()->andReturn(true); 
-        $doctor = new Doctor($dbMock);
+        $this->dbMock->shouldReceive('query')->once()->andReturn(true); 
+        $doctor = new Doctor($this->dbMock);
 
         // Dummy email of the doctor to be deleted
         $doctorEmail = 'john@example.com';
@@ -26,14 +35,13 @@ class DoctorTest extends TestCase
 
     public function testAddDoctor()
     {
-        $dbMock = Mockery::mock('Database');
-        $dbMock->shouldReceive('query')->once()->andReturn(true); 
-
-        $doctor = new Doctor($dbMock);
+       
+        $this->dbMock->shouldReceive('query')->once()->andReturn(true); 
+        $doctor = new Doctor($this->dbMock);
 
         // Dummy doctor data
         $doctorData = [
-            'doctor' => 'Dr. John Doe',
+            'doctor' => 'Dr. Amit Mishra',
             'dpassword' => 'password',
             'demail' => 'john@example.com',
             'special' => 'Cardiologist',

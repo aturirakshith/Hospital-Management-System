@@ -1,8 +1,56 @@
 <?php 
-require_once('database.php');
-$db = new Database("localhost", "root", "", "myhmsdb");
 
-include('newfunc.php');
+include_once('database.php');
+include_once('newfunc.php');
+
+$db=new Database("localhost", "root", "", "myhmsdb");
+$ap= new AdminPanel($db);
+
+class AdminPanel
+{
+    private $db;
+
+
+    public function __construct($db)
+    {
+       $this->db = $db;
+       
+    }
+    
+
+    public function getDoctorsList()
+    {
+      $query = "select * from doctb";
+      $result = $this->db->query($query); 
+      return $result;
+    }
+    public function getPatientList()
+    {
+      $query = "select * from patreg";
+      $result = $this->db->query($query); 
+      return $result;
+    }
+    public function getAppointmentDetailsList()
+    {
+      $query = "select * from appointmenttb";
+      $result = $this->db->query($query); 
+      return $result;
+    }
+    public function getQueriesList()
+    {
+      $query = "select * from contact";
+      $result = $this->db->query($query); 
+      return $result;
+    }
+    public function getPrescriptionList()
+    {
+      $query = "select * from prestb";
+      $result = $this->db->query($query); 
+      return $result;
+    }
+
+
+}
 
 if (isset($_POST['docsub'])) {
     addDoctor($db);
@@ -11,6 +59,7 @@ if (isset($_POST['docsub'])) {
 if (isset($_POST['docsub1'])) {
     deleteDoctor($db);
 }
+
 
 function addDoctor($db) {
     $doctor = $_POST['doctor'];
@@ -35,6 +84,9 @@ function deleteDoctor($db) {
         echo "<script>alert('Unable to delete!');</script>";
     }
 }
+
+
+
 ?>
 
 
@@ -257,61 +309,628 @@ function deleteDoctor($db) {
           </div>
           <br />
         </div>
+        <div class="col-md-8" style="margin-top: 3%">
+          <div class="tab-content" id="nav-tabContent" style="width: 950px">
+            <div
+              class="tab-pane fade show active"
+              id="list-dash"
+              role="tabpanel"
+              aria-labelledby="list-dash-list"
+            >
+              <div class="container-fluid container-fullw bg-white">
+                <div class="row">
+                  <div class="col-sm-4">
+                    <div class="panel panel-white no-radius text-center">
+                      <div class="panel-body">
+                        <span class="fa-stack fa-2x">
+                          <i class="fa fa-square fa-stack-2x text-primary"></i>
+                          <i class="fa fa-users fa-stack-1x fa-inverse"></i>
+                        </span>
+                        <h4 class="StepTitle" style="margin-top: 5%">
+                          Doctor List
+                        </h4>
+                        <script>
+                          function clickDiv(id) {
+                            document.querySelector(id).click();
+                          }
+                        </script>
+                        <p class="links cl-effect-1">
+                          <a
+                            href="#list-doc"
+                            onclick="clickDiv('#list-doc-list')"
+                          >
+                            View Doctors
+                          </a>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-4" style="left: -3%">
+                    <div class="panel panel-white no-radius text-center">
+                      <div class="panel-body">
+                        <span class="fa-stack fa-2x">
+                          <i class="fa fa-square fa-stack-2x text-primary"></i>
+                          <i class="fa fa-users fa-stack-1x fa-inverse"></i>
+                        </span>
+                        <h4 class="StepTitle" style="margin-top: 5%">
+                          Patient List
+                        </h4>
+
+                        <p class="cl-effect-1">
+                          <a
+                            href="#app-hist"
+                            onclick="clickDiv('#list-pat-list')"
+                          >
+                            View Patients
+                          </a>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-4">
+                    <div class="panel panel-white no-radius text-center">
+                      <div class="panel-body">
+                        <span class="fa-stack fa-2x">
+                          <i class="fa fa-square fa-stack-2x text-primary"></i>
+                          <i class="fa fa-paperclip fa-stack-1x fa-inverse"></i>
+                        </span>
+                        <h4 class="StepTitle" style="margin-top: 5%">
+                          Appointment Details
+                        </h4>
+
+                        <p class="cl-effect-1">
+                          <a
+                            href="#app-hist"
+                            onclick="clickDiv('#list-app-list')"
+                          >
+                            View Appointments
+                          </a>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-sm-4" style="left: 13%; margin-top: 5%">
+                    <div class="panel panel-white no-radius text-center">
+                      <div class="panel-body">
+                        <span class="fa-stack fa-2x">
+                          <i class="fa fa-square fa-stack-2x text-primary"></i>
+                          <i class="fa fa-list-ul fa-stack-1x fa-inverse"></i>
+                        </span>
+                        <h4 class="StepTitle" style="margin-top: 5%">
+                          Prescription List
+                        </h4>
+
+                        <p class="cl-effect-1">
+                          <a
+                            href="#list-pres"
+                            onclick="clickDiv('#list-pres-list')"
+                          >
+                            View Prescriptions
+                          </a>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-4" style="left: 18%; margin-top: 5%">
+                    <div class="panel panel-white no-radius text-center">
+                      <div class="panel-body">
+                        <span class="fa-stack fa-2x">
+                          <i class="fa fa-square fa-stack-2x text-primary"></i>
+                          <i class="fa fa-plus fa-stack-1x fa-inverse"></i>
+                        </span>
+                        <h4 class="StepTitle" style="margin-top: 5%">
+                          Manage Doctors
+                        </h4>
+
+                        <p class="cl-effect-1">
+                          <a
+                            href="#app-hist"
+                            onclick="clickDiv('#list-adoc-list')"
+                            >Add Doctors</a
+                          >
+                          &nbsp|
+                          <a
+                            href="#app-hist"
+                            onclick="clickDiv('#list-ddoc-list')"
+                          >
+                            Delete Doctors
+                          </a>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="tab-pane fade"
+              id="list-doc"
+              role="tabpanel"
+              aria-labelledby="list-home-list"
+            >
+              <div class="col-md-8">
+                <form
+                  class="form-group"
+                  action="doctorsearch.php"
+                  method="post"
+                >
+                  <div class="row">
+                    <div class="col-md-10">
+                      <input
+                        type="text"
+                        name="doctor_contact"
+                        placeholder="Enter Email ID"
+                        class="form-control"
+                      />
+                    </div>
+                    <div class="col-md-2">
+                      <input
+                        type="submit"
+                        name="doctor_search_submit"
+                        class="btn btn-primary"
+                        value="Search"
+                      />
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">Doctor Name</th>
+                    <th scope="col">Specialization</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Password</th>
+                    <th scope="col">Fees</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <?php 
+
+      
+                  $result=$ap->getDoctorsList();
+                  while ($row =$db->fetch_array($result)){ 
+                  $username = $row['username'];
+                  $spec = $row['spec']; $email = $row['email']; $password =
+                  $row['password']; $docFees = $row['docFees']; echo "
+                  <tr>
+                    <td>$username</td>
+                    <td>$spec</td>
+                    <td>$email</td>
+                    <td>$password</td>
+                    <td>$docFees</td>
+                  </tr>
+                  "; } ?>
+                </tbody>
+              </table>
+              <br />
+            </div>
+
+            <div
+              class="tab-pane fade"
+              id="list-pat"
+              role="tabpanel"
+              aria-labelledby="list-pat-list"
+            >
+              <div class="col-md-8">
+                <form
+                  class="form-group"
+                  action="patientsearch.php"
+                  method="post"
+                >
+                  <div class="row">
+                    <div class="col-md-10">
+                      <input
+                        type="text"
+                        name="patient_contact"
+                        placeholder="Enter Contact"
+                        class="form-control"
+                      />
+                    </div>
+                    <div class="col-md-2">
+                      <input
+                        type="submit"
+                        name="patient_search_submit"
+                        class="btn btn-primary"
+                        value="Search"
+                      />
+                    </div>
+                  </div>
+                </form>
+              </div>
+
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">Patient ID</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Gender</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Contact</th>
+                    <th scope="col">Password</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <?php 
+      
+                  $result=$ap->getPatientList();
+                   while ($row =$db->fetch_array($result)){ 
+                    $pid = $row['pid']; $fname =
+                  $row['fname']; $lname = $row['lname']; $gender =
+                  $row['gender']; $email = $row['email']; $contact =
+                  $row['contact']; $password = $row['password']; echo "
+                  <tr>
+                    <td>$pid</td>
+                    <td>$fname</td>
+                    <td>$lname</td>
+                    <td>$gender</td>
+                    <td>$email</td>
+                    <td>$contact</td>
+                    <td>$password</td>
+                  </tr>
+                  "; } ?>
+                </tbody>
+              </table>
+              <br />
+            </div>
+
+            <div
+              class="tab-pane fade"
+              id="list-pres"
+              role="tabpanel"
+              aria-labelledby="list-pres-list"
+            >
+              <div class="col-md-8">
+                <div class="row">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th scope="col">Doctor</th>
+                        <th scope="col">Patient ID</th>
+                        <th scope="col">Appointment ID</th>
+                        <th scope="col">First Name</th>
+                        <th scope="col">Last Name</th>
+                        <th scope="col">Appointment Date</th>
+                        <th scope="col">Appointment Time</th>
+                        <th scope="col">Disease</th>
+                        <th scope="col">Allergy</th>
+                        <th scope="col">Prescription</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <?php 
+                        $result=$ap->getPrescriptionList();
+                      while ($row =
+                      $db->fetch_array($result)){ $doctor = $row['doctor']; $pid
+                      = $row['pid']; $ID = $row['ID']; $fname = $row['fname'];
+                      $lname = $row['lname']; $appdate = $row['appdate'];
+                      $apptime = $row['apptime']; $disease = $row['disease'];
+                      $allergy = $row['allergy']; $pres = $row['prescription'];
+                      echo "
+                      <tr>
+                        <td>$doctor</td>
+                        <td>$pid</td>
+                        <td>$ID</td>
+                        <td>$fname</td>
+                        <td>$lname</td>
+                        <td>$appdate</td>
+                        <td>$apptime</td>
+                        <td>$disease</td>
+                        <td>$allergy</td>
+                        <td>$pres</td>
+                      </tr>
+                      "; } ?>
+                    </tbody>
+                  </table>
+                  <br />
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="tab-pane fade"
+              id="list-app"
+              role="tabpanel"
+              aria-labelledby="list-pat-list"
+            >
+              <div class="col-md-8">
+                <form class="form-group" action="appsearch.php" method="post">
+                  <div class="row">
+                    <div class="col-md-10">
+                      <input
+                        type="text"
+                        name="app_contact"
+                        placeholder="Enter Contact"
+                        class="form-control"
+                      />
+                    </div>
+                    <div class="col-md-2">
+                      <input
+                        type="submit"
+                        name="app_search_submit"
+                        class="btn btn-primary"
+                        value="Search"
+                      />
+                    </div>
+                  </div>
+                </form>
+              </div>
+
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">Appointment ID</th>
+                    <th scope="col">Patient ID</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Gender</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Contact</th>
+                    <th scope="col">Doctor Name</th>
+                    <th scope="col">Consultancy Fees</th>
+                    <th scope="col">Appointment Date</th>
+                    <th scope="col">Appointment Time</th>
+                    <th scope="col">Appointment Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <?php 
+
        
+      $result=$ap->getAppointmentDetailsList();
+          while ($row =
+                  $db->fetch_array($result)){ ?>
+                  <tr>
+                    <td><?php echo $row['ID'];?></td>
+                    <td><?php echo $row['pid'];?></td>
+                    <td><?php echo $row['fname'];?></td>
+                    <td><?php echo $row['lname'];?></td>
+                    <td><?php echo $row['gender'];?></td>
+                    <td><?php echo $row['email'];?></td>
+                    <td><?php echo $row['contact'];?></td>
+                    <td><?php echo $row['doctor'];?></td>
+                    <td><?php echo $row['docFees'];?></td>
+                    <td><?php echo $row['appdate'];?></td>
+                    <td><?php echo $row['apptime'];?></td>
+                    <td>
+                      <?php if(($row['userStatus']==1) && ($row['doctorStatus']==1))  
+                    {
+                      echo "Active";
+                    }
+                    if(($row['userStatus']==0) && ($row['doctorStatus']==1))  
+                    {
+                      echo "Cancelled by Patient";
+                    }
 
-        <div class="tab-pane fade" id="list-pat" role="tabpanel" aria-labelledby="list-pat-list">
+                    if(($row['userStatus']==1) && ($row['doctorStatus']==0))  
+                    {
+                      echo "Cancelled by Doctor";
+                    }
+                        ?>
+                    </td>
+                  </tr>
+                  <?php } ?>
+                </tbody>
+              </table>
+              <br />
+            </div>
 
-<div class="col-md-8">
-<form class="form-group" action="patientsearch.php" method="post">
- <div class="row">
- <div class="col-md-10"><input type="text" name="patient_contact" placeholder="Enter Contact" class = "form-control"></div>
- <div class="col-md-2"><input type="submit" name="patient_search_submit" class="btn btn-primary" value="Search"></div></div>
-</form>
-</div>
- 
-       <table class="table table-hover">
-         <thead>
-           <tr>
-           <th scope="col">Patient ID</th>
-             <th scope="col">First Name</th>
-             <th scope="col">Last Name</th>
-             <th scope="col">Gender</th>
-             <th scope="col">Email</th>
-             <th scope="col">Contact</th>
-             <th scope="col">Password</th>
-           </tr>
-         </thead>
-         <tbody>
-           <?php 
+            <div
+              class="tab-pane fade"
+              id="list-messages"
+              role="tabpanel"
+              aria-labelledby="list-messages-list"
+            >
+              ...
+            </div>
 
-             $query = "select * from patreg";
-             $result = $db->query($query);
-             while ($row = $db->fetch_array($result)){
-               $pid = $row['pid'];
-               $fname = $row['fname'];
-               $lname = $row['lname'];
-               $gender = $row['gender'];
-               $email = $row['email'];
-               $contact = $row['contact'];
-               $password = $row['password'];
-               
-               echo "<tr>
-                 <td>$pid</td>
-                 <td>$fname</td>
-                 <td>$lname</td>
-                 <td>$gender</td>
-                 <td>$email</td>
-                 <td>$contact</td>
-                 <td>$password</td>
-               </tr>";
-             }
+            <div
+              class="tab-pane fade"
+              id="list-settings"
+              role="tabpanel"
+              aria-labelledby="list-settings-list"
+            >
+              <form class="form-group" method="post" action="admin-panel1.php">
+                <div class="row">
+                  <div class="col-md-4"><label>Doctor Name:</label></div>
+                  <div class="col-md-8">
+                    <input
+                      type="text"
+                      class="form-control"
+                      name="doctor"
+                      onkeydown="return alphaOnly(event);"
+                      required
+                    />
+                  </div>
+                  <br /><br />
+                  <div class="col-md-4"><label>Specialization:</label></div>
+                  <div class="col-md-8">
+                    <select
+                      name="special"
+                      class="form-control"
+                      id="special"
+                      required="required"
+                    >
+                      <option value="head" name="spec" disabled selected>
+                        Select Specialization
+                      </option>
+                      <option value="General" name="spec">General</option>
+                      <option value="Cardiologist" name="spec">
+                        Cardiologist
+                      </option>
+                      <option value="Neurologist" name="spec">
+                        Neurologist
+                      </option>
+                      <option value="Pediatrician" name="spec">
+                        Pediatrician
+                      </option>
+                    </select>
+                  </div>
+                  <br /><br />
+                  <div class="col-md-4"><label>Email ID:</label></div>
+                  <div class="col-md-8">
+                    <input
+                      type="email"
+                      class="form-control"
+                      name="demail"
+                      required
+                    />
+                  </div>
+                  <br /><br />
+                  <div class="col-md-4"><label>Password:</label></div>
+                  <div class="col-md-8">
+                    <input
+                      type="password"
+                      class="form-control"
+                      onkeyup="check();"
+                      name="dpassword"
+                      id="dpassword"
+                      required
+                    />
+                  </div>
+                  <br /><br />
+                  <div class="col-md-4"><label>Confirm Password:</label></div>
+                  <div class="col-md-8" id="cpass">
+                    <input
+                      type="password"
+                      class="form-control"
+                      onkeyup="check();"
+                      name="cdpassword"
+                      id="cdpassword"
+                      required
+                    />&nbsp &nbsp<span id="message"></span>
+                  </div>
+                  <br /><br />
 
-           ?>
-         </tbody>
-       </table>
- <br>
-</div>
+                  <div class="col-md-4"><label>Consultancy Fees:</label></div>
+                  <div class="col-md-8">
+                    <input
+                      type="text"
+                      class="form-control"
+                      name="docFees"
+                      required
+                    />
+                  </div>
+                  <br /><br />
+                </div>
+                <input
+                  type="submit"
+                  name="docsub"
+                  value="Add Doctor"
+                  class="btn btn-primary"
+                />
+              </form>
+            </div>
 
+            <div
+              class="tab-pane fade"
+              id="list-settings1"
+              role="tabpanel"
+              aria-labelledby="list-settings1-list"
+            >
+              <form class="form-group" method="post" action="admin-panel1.php">
+                <div class="row">
+                  <div class="col-md-4"><label>Email ID:</label></div>
+                  <div class="col-md-8">
+                    <input
+                      type="email"
+                      class="form-control"
+                      name="demail"
+                      required
+                    />
+                  </div>
+                  <br /><br />
+                </div>
+                <input
+                  type="submit"
+                  name="docsub1"
+                  value="Delete Doctor"
+                  class="btn btn-primary"
+                  onclick="confirm('do you really want to delete?')"
+                />
+              </form>
+            </div>
+
+            <div
+              class="tab-pane fade"
+              id="list-attend"
+              role="tabpanel"
+              aria-labelledby="list-attend-list"
+            >
+              ...
+            </div>
+
+            <div
+              class="tab-pane fade"
+              id="list-mes"
+              role="tabpanel"
+              aria-labelledby="list-mes-list"
+            >
+              <div class="col-md-8">
+                <form class="form-group" action="messearch.php" method="post">
+                  <div class="row">
+                    <div class="col-md-10">
+                      <input
+                        type="text"
+                        name="mes_contact"
+                        placeholder="Enter Contact"
+                        class="form-control"
+                      />
+                    </div>
+                    <div class="col-md-2">
+                      <input
+                        type="submit"
+                        name="mes_search_submit"
+                        class="btn btn-primary"
+                        value="Search"
+                      />
+                    </div>
+                  </div>
+                </form>
+              </div>
+
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">User Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Contact</th>
+                    <th scope="col">Message</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <?php 
+                  
+
+                   
+                    $result = $ap->getQueriesList();
+                    while ($row = mysqli_fetch_array($result)){
+                    
+                  #$fname = $row['fname']; #$lname =
+                  $row['lname']; #$email = $row['email']; #$contact =
+                  $row['contact']; ?>
+                  <tr>
+                    <td><?php echo $row['name'];?></td>
+                    <td><?php echo $row['email'];?></td>
+                    <td><?php echo $row['contact'];?></td>
+                    <td><?php echo $row['message'];?></td>
+                  </tr>
+                  <?php } ?>
+                </tbody>
+              </table>
+              <br />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <script
       src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
